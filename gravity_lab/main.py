@@ -34,6 +34,17 @@ for step in range(total_steps):
     orbit.append(relative_position.copy())
 orbit = np.array(orbit)
 
+initial_energy = energy_history[0]
+
+relative_error = [
+    abs((energy - initial_energy) / initial_energy)
+    for energy in energy_history
+]
+
+print("Initial energy:", initial_energy)
+print("Final energy:", energy_history[-1])
+print("Maximum relative energy error:", max(relative_error))
+
 plt.figure(figsize=(8,8))
 
 plt.plot(orbit[:,0], orbit[:,1], label="Earth orbit ")
@@ -53,6 +64,5 @@ plt.plot(time_history,energy_history)
 plt.xlabel("Time (seconds) ")
 plt.ylabel("Total Energy (Joules)")
 plt.title("Total Mechanical Energy ")
-plt.grid()
 
 plt.show()
