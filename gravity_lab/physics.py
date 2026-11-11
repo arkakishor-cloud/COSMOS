@@ -63,3 +63,17 @@ def total_energy(bodies):
 
             potential += (-G*bodies[i].mass*bodies[j].mass/distance)
     return kinetic+potential
+
+def set_barycentric_frame(bodies):
+    if not bodies:
+        raise ValueError("The system must contain atleast one body ")
+    total_mass=sum(body.mass for body in bodies)
+    if total_mass <= 0:
+        raise ValueError("Total mass must be positive ")
+    centre_of_mass = sum(body.mass*body.position for body in bodies)/total_mass
+    centre_velocity = sum(body.mass*body.velocity for body in bodies)/total_mass
+
+    for body in bodies:
+        body.position -= centre_of_mass
+        body.velocity -= centre_velocity
+    return centre_of_mass, centre_velocity
