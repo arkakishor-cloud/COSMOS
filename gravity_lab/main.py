@@ -1,20 +1,7 @@
-# from physics import gravitational_force, calculate_acceleration
 import numpy as np
 import matplotlib.pyplot as plt
 np.set_printoptions(precision=8,suppress=False)
-# sun_mass = 1.88e30
-# sun_pos = [0,0]
-# 
-# earth_mass = 5.97e24
-# earth_pos = [1.49e11, 0 ]
-# 
-# force=gravitational_force(sun_mass,earth_mass,sun_pos,earth_pos)
-# accelaration=calculate_acceleration(force, earth_mass)
-# 
-# print("The Gravitational force of the sun ",force)
-# print((force[0]**2 + force[1]**2)**0.5)
-# print("Earth acceleration g = ", accelaration)
-# print("Magnitude = ", np.linalg.norm(acceleration))
+
 
 
 from physics import Body, update_body, calculate_gravity
@@ -23,7 +10,7 @@ from physics import Body, update_body, calculate_gravity
 earth = Body(
     mass=5.9722e24,
     position=[1.495978707e11, 0],
-    velocity=[0, 29780]
+    velocity=[0, 20000]
 )
 
 sun = Body(
@@ -50,22 +37,21 @@ for step in range(total_steps):
     update_body(sun, dt)
     update_body(earth, dt)
 
-    print(f"Step: {step + 1}")
-    print("Earth position:", earth.position)
-    print("Earth velocity:", earth.velocity)
-    print()
-print("Earth acceleration:", earth_acc)
-# # Give Earth an acceleration
-# earth.acceleration = [-0.00593, 0]
+    relative_position= earth.position-sun.position
+    orbit.append(relative_position.copy())
+orbit = np.array(orbit)
 
-# # Simulate 10 steps
-# dt = 60
+plt.figure(figsize=(8,8))
 
-# for step in range(10):
+plt.plot(orbit[:,0], orbit[:,1], label="Earth orbit ")
+plt.scatter(0,0,color='orange', label='Sun ')
 
-#     update_body(earth, dt)
+plt.xlabel("X position (m)")
+plt.ylabel("Y position (m)")
+plt.title("Earth orbit ")
 
-#     print("Step:", step + 1)
-#     print("Position:", earth.position)
-#     print("Velocity:", earth.velocity)
-#     print()
+plt.axis("equal")
+plt.grid()
+plt.legend()
+
+plt.show()
