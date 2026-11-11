@@ -20,12 +20,14 @@ dt = 3600  # One simulated hour
 total_steps=8766
 
 orbit=[]
-energy_history =[]
-time_history = []
+bodies=[sun,earth]
+initial_energy = total_energy(bodies)
+energy_history =[initial_energy]
+time_history = [0]
 
 for step in range(total_steps):
-    velocity_verlet_step(sun,earth,dt)
-    energy = total_energy(sun,earth)
+    velocity_verlet_step(bodies,dt)
+    energy = total_energy(bodies)
 
     relative_position=earth.position - sun.position
     
@@ -33,8 +35,6 @@ for step in range(total_steps):
     time_history.append(step*dt)
     orbit.append(relative_position.copy())
 orbit = np.array(orbit)
-
-initial_energy = energy_history[0]
 
 relative_error = [
     abs((energy - initial_energy) / initial_energy)
@@ -64,5 +64,6 @@ plt.plot(time_history,energy_history)
 plt.xlabel("Time (seconds) ")
 plt.ylabel("Total Energy (Joules)")
 plt.title("Total Mechanical Energy ")
+plt.grid()
 
 plt.show()
