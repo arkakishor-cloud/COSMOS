@@ -16,11 +16,18 @@ sun = Body(
     velocity=[0, 0]
 )
 
+mars = Body(
+    mass=6.4171e23,
+    position=[2.2794e11*0.5, 2.2794e11*np.sqrt(3)/2],
+    velocity=[-24077*np.sqrt(3)/2, 24077*0.5]
+)
+
 dt = 3600  # One simulated hour
 total_steps=8766
 
-orbit=[]
-bodies=[sun,earth]
+earth_orbit=[]
+mars_orbit=[]
+bodies=[sun,earth,mars]
 initial_energy = total_energy(bodies)
 energy_history =[initial_energy]
 time_history = [0]
@@ -28,13 +35,13 @@ time_history = [0]
 for step in range(total_steps):
     velocity_verlet_step(bodies,dt)
     energy = total_energy(bodies)
-
-    relative_position=earth.position - sun.position
     
     energy_history.append(energy)
     time_history.append(step*dt)
-    orbit.append(relative_position.copy())
-orbit = np.array(orbit)
+    earth_orbit.append((earth.position-sun.position).copy())
+    mars_orbit.append((mars.position-sun.position).copy())
+earth_orbit = np.array(earth_orbit)
+mars_orbit = np.array(mars_orbit)
 
 relative_error = [
     abs((energy - initial_energy) / initial_energy)
@@ -45,14 +52,15 @@ print("Initial energy:", initial_energy)
 print("Final energy:", energy_history[-1])
 print("Maximum relative energy error:", max(relative_error))
 
-plt.figure(figsize=(8,8))
+plt.figure(figsize=(9,9))
 
-plt.plot(orbit[:,0], orbit[:,1], label="Earth orbit ")
+plt.plot(earth_orbit[:,0], earth_orbit[:,1], label="Earth orbit ")
+plt.plot(mars_orbit[:,0], mars_orbit[:,1], label="Mars orbit ")
 plt.scatter(0,0,color='orange', label='Sun ')
 
 plt.xlabel("X position (m)")
 plt.ylabel("Y position (m)")
-plt.title("Earth orbit ")
+plt.title("3-body sim ")
 
 plt.axis("equal")
 plt.grid()
