@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 np.set_printoptions(precision=8,suppress=False)
-from physics import Body, update_body, calculate_gravity,velocity_verlet_step
+from physics import Body,velocity_verlet_step, total_energy
 
 # Create Earth
 earth = Body(
@@ -20,11 +20,17 @@ dt = 3600  # One simulated hour
 total_steps=8766
 
 orbit=[]
+energy_history =[]
+time_history = []
 
 for step in range(total_steps):
     velocity_verlet_step(sun,earth,dt)
+    energy = total_energy(sun,earth)
 
     relative_position=earth.position - sun.position
+    
+    energy_history.append(energy)
+    time_history.append(step*dt)
     orbit.append(relative_position.copy())
 orbit = np.array(orbit)
 
@@ -40,5 +46,13 @@ plt.title("Earth orbit ")
 plt.axis("equal")
 plt.grid()
 plt.legend()
+
+plt.figure(figsize=(10,5))
+plt.plot(time_history,energy_history)
+
+plt.xlabel("Time (seconds) ")
+plt.ylabel("Total Energy (Joules)")
+plt.title("Total Mechanical Energy ")
+plt.grid()
 
 plt.show()

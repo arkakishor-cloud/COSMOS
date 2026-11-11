@@ -43,3 +43,22 @@ def velocity_verlet_step(body1,body2,dt):
 
     body1.velocity += 0.5*(a1_old+a1_new)*dt
     body2.velocity += 0.5*(a2_old+a2_new)*dt
+
+def kinetic_energy(body):
+    speed_squared = np.dot(body.velocity, body.velocity)
+
+    return 0.5*body.mass*speed_squared
+
+def gravitational_potential_energy(body1,body2):
+    displacement = body2.position - body1.position
+    distance = np.linalg.norm(displacement)
+
+    if distance == 0:
+        raise ValueError("Two bodies can't have same position ")
+
+    return -G*body1.mass*body2.mass/distance
+
+def total_energy(body1, body2):
+    kinetic = kinetic_energy(body1)+kinetic_energy(body2)
+    potential = gravitational_potential_energy(body1, body2)
+    return kinetic + potential
