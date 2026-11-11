@@ -1,10 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 np.set_printoptions(precision=8,suppress=False)
-
-
-
-from physics import Body, update_body, calculate_gravity
+from physics import Body, update_body, calculate_gravity,velocity_verlet_step
 
 # Create Earth
 earth = Body(
@@ -25,19 +22,9 @@ total_steps=8766
 orbit=[]
 
 for step in range(total_steps):
+    velocity_verlet_step(sun,earth,dt)
 
-    # Calculate gravitational acceleration
-    sun_acc, earth_acc = calculate_gravity(sun, earth)
-
-    # Assign acceleration
-    sun.acceleration = sun_acc
-    earth.acceleration = earth_acc
-
-    # Update both bodies
-    update_body(sun, dt)
-    update_body(earth, dt)
-
-    relative_position= earth.position-sun.position
+    relative_position=earth.position - sun.position
     orbit.append(relative_position.copy())
 orbit = np.array(orbit)
 

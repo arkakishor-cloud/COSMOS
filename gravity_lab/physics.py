@@ -32,3 +32,14 @@ def calculate_gravity(body1, body2):
     acceleration1=force/body1.mass
     acceleration2=-force/body2.mass
     return acceleration1, acceleration2
+
+def velocity_verlet_step(body1,body2,dt):
+    a1_old, a2_old=calculate_gravity(body1,body2)
+
+    body1.position+=(body1.velocity*dt+0.5*a1_old*dt**2)
+    body2.position+=(body2.velocity*dt+0.5*a2_old*dt**2)
+
+    a1_new, a2_new = calculate_gravity(body1, body2)
+
+    body1.velocity += 0.5*(a1_old+a1_new)*dt
+    body2.velocity += 0.5*(a2_old+a2_new)*dt
